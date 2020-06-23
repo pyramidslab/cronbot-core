@@ -1,6 +1,5 @@
 
-![Build](https://travis-ci.org/ahelmy/cronbot.svg?branch=master)  [![codecov](https://codecov.io/gh/ahelmy/cronbot/branch/master/graph/badge.svg)](https://codecov.io/gh/ahelmy/cronbot) [![Maintainability](https://api.codeclimate.com/v1/badges/7660cf55168e144aadfb/maintainability)](https://codeclimate.com/github/ahelmy/cronbot/maintainability) 
-[![Gitter](https://badges.gitter.im/cronbot1/community.svg)](https://gitter.im/cronbot1/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.com/pyramidslab/cronbot-core.svg?branch=master)](https://travis-ci.com/pyramidslab/cronbot-core)  [![codecov](https://codecov.io/gh/pyramidslab/cronbot-core/branch/master/graph/badge.svg)](https://codecov.io/gh/pyramidslab/cronbot-core)  [![Maintainability](https://api.codeclimate.com/v1/badges/53f6abbb852cca335417/maintainability)](https://codeclimate.com/github/pyramidslab/cronbot-core/maintainability)  [![Gitter](https://badges.gitter.im/cronbot1/community.svg)](https://gitter.im/cronbot1/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 # Cronbot
 Cronbot is a distributed cron job system allowing specific tasks/jobs to be executed at scheduled time or recurring times.
 
