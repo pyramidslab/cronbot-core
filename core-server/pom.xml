@@ -102,6 +102,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>core-server</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
