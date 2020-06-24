@@ -5,6 +5,7 @@ before_script: cd core-server
 # https://docs.travis-ci.com/user/reference/overview/#linux
 dist: xenial
 
+
 branches:
   only:
   - master
