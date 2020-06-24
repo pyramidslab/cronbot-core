@@ -5,7 +5,7 @@ FROM maven:3.6.1-jdk-8-alpine AS MAVEN_BUILD
 COPY ./ ./
  
 # package our application code
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Docker Agent
 FROM openjdk:8-jdk-alpine
