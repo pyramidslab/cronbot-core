@@ -1,0 +1,10 @@
+cronbot:
+  security:
+    jwt:
+      access-token-validity: 30
+    new-user-default-password: 123456789
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://cronbot:yc0fQjWxzzlQ2x0C@cluster0-4vla8.gcp.mongodb.net/cronbot?retryWrites=true&w=majority

@@ -1,0 +1,33 @@
+# Travis CI Java documentation can be found in:
+# https://docs.travis-ci.com/user/languages/java/
+# Only do in master branch
+branches:
+  only:
+  - master
+# cd core-server
+before_script: cd core-server
+# We will use Ubuntu 18.04 (bionic beaver). List of options:
+# https://docs.travis-ci.com/user/reference/overview/#linux
+dist: xenial
+
+# This enables the 'defaults' to test java applications:
+language: java
+# JDK 8
+jdk:
+ - openjdk8
+
+# Enbale docker service
+services:
+  - docker
+
+# After mvn run tests (default travis script for Java)
+after_script:
+  - mvn clean package -DskipTests
+  - docker build . -t pyramidslab/cronbot-core:latest  
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push pyramidslab/cronbot-core:latest
+
+# This is to enable CodeCov's coverage
+# If a build is successful, the code is submitted for coverage analysis
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
