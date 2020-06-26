@@ -8,6 +8,8 @@ COPY target/core-server.jar app.jar
 COPY src/main/docker/entrypoint.sh entrypoint.sh
 # Make dir for config
 RUN mkdir /config
+# Allow config dir for volume bind
+VOLUME [ "/config" ]
 # Make entrypoint executable
 RUN chmod 777 /entrypoint.sh
 RUN chmod +x /entrypoint.sh
