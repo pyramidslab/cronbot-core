@@ -23,7 +23,7 @@ services:
 # After mvn run tests (default travis script for Java)
 after_script:
   - mvn clean package -DskipTests
-  - docker build . -t pyramidslab/cronbot-core:latest  
+  - docker build . --file=src/main/docker/Dockerfile -t pyramidslab/cronbot-core:latest
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push pyramidslab/cronbot-core:latest
 

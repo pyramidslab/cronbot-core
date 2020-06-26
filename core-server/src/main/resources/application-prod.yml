@@ -1,0 +1,9 @@
+cronbot:
+  security:
+    jwt:
+      access-token-validity: ${ACCESS_TOKEN_TIMEOUT}
+    new-user-default-password: ${NEW_USER_PASSWORD}
+
+mongo:
+  db: ${MONGO_DB}
+  host: ${MONGO_HOST}

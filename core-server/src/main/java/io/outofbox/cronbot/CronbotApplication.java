@@ -22,22 +22,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author ahelmy
  */
 @SpringBootApplication
-public class CronbotApplication implements ApplicationRunner {
+public class CronbotApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CronbotApplication.class, args);
     }
 
-    @Autowired
-    BCryptPasswordEncoder encoder;
+    
     @Bean
     public ObjectMapper objectMapper(){
         return new ObjectMapper();
     }
-
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        System.out.println(encoder.encode("password"));
-    }
-
 }
