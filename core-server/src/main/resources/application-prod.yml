@@ -1,8 +1,8 @@
 cronbot:
   security:
     jwt:
-      access-token-validity: ${ACCESS_TOKEN_TIMEOUT}
-    new-user-default-password: ${NEW_USER_PASSWORD}
+      access-token-validity: ${ACCESS_TOKEN_TIMEOUT:30}
+    new-user-default-password: ${NEW_USER_PASSWORD:123456789}
 
 mongo:
   db: ${MONGO_DB}
