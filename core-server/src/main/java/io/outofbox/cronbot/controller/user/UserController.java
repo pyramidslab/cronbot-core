@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.FailedLoginException;
 import java.util.List;
-
-/**
- * @author ahelmy
- */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/users")
@@ -37,7 +33,7 @@ public class UserController {
     public ResponseEntity<User> getUserByUsername(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
                                           @PathVariable("user-id") String username) throws NotFoundException, OperationFailureException {
 
-        User user = userService.findUserByUsername(authorization, username);
+        User user = userService.findUserByUsername(username);
 
         return  ResponseEntity.ok(user);
     }
@@ -47,7 +43,7 @@ public class UserController {
                                            @PathVariable("user-id") String username,
                                            @RequestBody UserDetails userDetails) throws NotFoundException, OperationFailureException {
 
-        User user = userService.updateUser(authorization, username, userDetails);
+        User user = userService.updateUser(username, userDetails);
 
         return  ResponseEntity.ok(user);
     }
@@ -56,7 +52,7 @@ public class UserController {
     public ResponseEntity<User> deleteUserByUsername(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
                                                   @PathVariable("user-id") String username) throws FailedLoginException, NotFoundException, OperationFailureException {
 
-        User user = userService.deleteUser(authorization, username);
+        User user = userService.deleteUser( username);
 
         return  ResponseEntity.ok(user);
     }

@@ -95,21 +95,21 @@ public class UserServiceTest {
     @Test
     @DisplayName("findByUsername")
     public void testFindByUsername_Exists() throws NotFoundException, OperationFailureException {
-        User user = userService.findUserByUsername("", USERNAME);
+        User user = userService.findUserByUsername(USERNAME);
         Assertions.assertThat(user.getUsername()).isEqualTo(USERNAME);
     }
 
     @Test(expected = NotFoundException.class)
     @DisplayName("findByUsernameNotExists")
     public void testFindByUsername_NotFound() throws NotFoundException, OperationFailureException {
-        User user = userService.findUserByUsername("", USERNAME+"1");
+        User user = userService.findUserByUsername(USERNAME+"1");
     }
 
     @Test(expected = OperationFailureException.class)
     @DisplayName("findByUsernameError")
     public void testFindByUsername_Error() throws NotFoundException, OperationFailureException {
         Mockito.when(userRepository.findByUsername(USERNAME)).thenThrow(new MongoException("Error"){});
-        User user = userService.findUserByUsername("", USERNAME);
+        User user = userService.findUserByUsername( USERNAME);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class UserServiceTest {
         userDetails.setUsername("");
         userDetails.setPassword("12345678");
         userDetails.setEmail("user1@mail.com1");
-        User user11 =  userService.updateUser(Mockito.any() ,USERNAME, userDetails);
+        User user11 =  userService.updateUser(USERNAME, userDetails);
         Assertions.assertThat(user11.getEmail()).isEqualTo("user1@mail.com1");
     }
 
@@ -192,7 +192,7 @@ public class UserServiceTest {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setEmail("user1@mail.com1");
-        User user11 =  userService.updateUser(Mockito.any() ,USERNAME, userDetails);
+        User user11 =  userService.updateUser(USERNAME, userDetails);
         Assertions.assertThat(user11.getPassword()).isEqualTo("123456789");
     }
 
@@ -203,7 +203,7 @@ public class UserServiceTest {
         userDetails.setUsername(USERNAME);
         userDetails.setPassword("1234567");
         userDetails.setEmail("user1@mail.com");
-        User user11 =  userService.updateUser(Mockito.any() ,USERNAME+1, userDetails);
+        User user11 =  userService.updateUser(USERNAME+1, userDetails);
        // User user11 =  userService.createUser(USERNAME, user1);
     }
 
@@ -216,19 +216,19 @@ public class UserServiceTest {
         userDetails.setUsername(USERNAME);
         userDetails.setPassword("1234567");
         userDetails.setEmail("user1@mail.com");
-        User user11 =  userService.updateUser(Mockito.any(), USERNAME, userDetails);
+        User user11 =  userService.updateUser(USERNAME, userDetails);
     }
 
     @Test
     @DisplayName("deleteUser")
     public void testDeleteUser() throws NotFoundException,OperationFailureException {
-        userService.deleteUser(Mockito.any(),USERNAME);
+        userService.deleteUser(USERNAME);
     }
 
     @Test(expected = NotFoundException.class)
     @DisplayName("deleteUserNotFound")
     public void testDeleteUser_NotFound() throws NotFoundException,OperationFailureException {
-        userService.deleteUser(Mockito.any(),USERNAME+1);
+        userService.deleteUser(USERNAME+1);
     }
 
     @Test(expected = OperationFailureException.class)
@@ -236,6 +236,6 @@ public class UserServiceTest {
     public void testDeleteUser_Error() throws NotFoundException, OperationFailureException {
         Mockito.doThrow(new MongoException("Error"){}).when(userRepository).delete(Mockito.any());
 
-        userService.deleteUser(Mockito.any(),USERNAME);
+        userService.deleteUser(USERNAME);
     }
 }

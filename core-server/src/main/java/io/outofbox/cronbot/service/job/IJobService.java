@@ -1,5 +1,7 @@
 package io.outofbox.cronbot.service.job;
 
-public interface IJobService {
+import io.outofbox.cronbot.model.Job;
 
+public interface IJobService {
+    Job createJob(Job job);
 }

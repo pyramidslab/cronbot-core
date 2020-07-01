@@ -1,7 +1,5 @@
 package io.outofbox.cronbot.security.service.impl;
 
-import io.outofbox.cronbot.model.user.User;
-import io.outofbox.cronbot.repository.user.UserRepository;
 import io.outofbox.cronbot.security.model.LoginUser;
 import io.outofbox.cronbot.security.repository.LoginUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
