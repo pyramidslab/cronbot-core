@@ -34,7 +34,7 @@ public class PluginService  implements IPluginService {
         this.monitoringObjHelper = monitoringObjHelper;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
     public Plugin findById(String id) throws NotFoundException, OperationFailureException {
         try {
