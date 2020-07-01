@@ -83,7 +83,7 @@ public class UserServiceTest {
 
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user1);
 
-        Mockito.when(securityHelper.canAccessOwn(Mockito.anyString(),Mockito.anyString())).thenReturn(true);
+        Mockito.when(securityHelper.canAccessOwn(Mockito.anyString())).thenReturn(true);
 
         Mockito.when(encoder.encode("12345678")).thenReturn("12345678");
 
@@ -133,8 +133,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByUsername(USERNAME))
                 .thenReturn(Optional.empty());
 
-        UserDetails user1 = new UserDetails();
-        user1.setUsername(USERNAME);
+        UserDetails user1 = new UserDetails(USERNAME);
         user1.setEmail("user1@mail.com");
         User user11 =  userService.createUser(USERNAME, user1);
         Assertions.assertThat(user11.getId()).isEqualTo(ID);
@@ -143,8 +142,7 @@ public class UserServiceTest {
     @Test(expected = ConflictExcpetion.class)
     @DisplayName("createUserExists")
     public void testCreateUser_Exists() throws ConflictExcpetion,OperationFailureException {
-        UserDetails user1 = new UserDetails();
-        user1.setUsername(USERNAME);
+        UserDetails user1 = new UserDetails(USERNAME);
         user1.setPassword("1234567");
         user1.setEmail("user1@mail.com");
         User user11 =  userService.createUser(USERNAME, user1);
@@ -155,8 +153,7 @@ public class UserServiceTest {
     public void testCreateUser_Error() throws  ConflictExcpetion, OperationFailureException {
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenThrow(new MongoException("Error"){});
 
-        UserDetails user1 = new UserDetails();
-        user1.setUsername(USERNAME);
+        UserDetails user1 = new UserDetails(USERNAME);
         user1.setPassword("1234567");
         user1.setEmail("user1@mail.com");
         User user11 =  userService.createUser(USERNAME, user1);
@@ -172,8 +169,7 @@ public class UserServiceTest {
         user1.setEmail("user1@mail.com1");
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user1);
 
-        UserDetails userDetails = new UserDetails();
-        userDetails.setUsername("");
+        UserDetails userDetails = new UserDetails("");
         userDetails.setPassword("12345678");
         userDetails.setEmail("user1@mail.com1");
         User user11 =  userService.updateUser(USERNAME, userDetails);
@@ -190,7 +186,7 @@ public class UserServiceTest {
         user1.setEmail("user1@mail.com1");
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user1);
 
-        UserDetails userDetails = new UserDetails();
+        UserDetails userDetails = new UserDetails("");
         userDetails.setEmail("user1@mail.com1");
         User user11 =  userService.updateUser(USERNAME, userDetails);
         Assertions.assertThat(user11.getPassword()).isEqualTo("123456789");
@@ -199,8 +195,7 @@ public class UserServiceTest {
     @Test(expected = NotFoundException.class)
     @DisplayName("updateUserNotFound")
     public void testUpdateUser_NotFound() throws NotFoundException,OperationFailureException {
-        UserDetails userDetails = new UserDetails();
-        userDetails.setUsername(USERNAME);
+        UserDetails userDetails = new UserDetails(USERNAME);
         userDetails.setPassword("1234567");
         userDetails.setEmail("user1@mail.com");
         User user11 =  userService.updateUser(USERNAME+1, userDetails);
@@ -212,8 +207,7 @@ public class UserServiceTest {
     public void testUpdateUser_Error() throws  NotFoundException, OperationFailureException {
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenThrow(new MongoException("Error"){});
 
-        UserDetails userDetails = new UserDetails();
-        userDetails.setUsername(USERNAME);
+        UserDetails userDetails = new UserDetails(USERNAME);
         userDetails.setPassword("1234567");
         userDetails.setEmail("user1@mail.com");
         User user11 =  userService.updateUser(USERNAME, userDetails);
