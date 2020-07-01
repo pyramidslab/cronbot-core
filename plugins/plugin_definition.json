@@ -1,0 +1,37 @@
+{
+    "description": "Short description",
+    "definition": {
+        "http_method": {
+            "type": "string",
+            "required": false,
+            "description": "Choose value",
+            "enums": [
+                "POST",
+                "GET",
+                "DELETE"
+            ],
+            "language": null
+        },
+        "body": {
+            "type": "text_area",
+            "required": false,
+            "description": "Enter http body",
+            "enums": null,
+            "language": "json, sql, xml, etc..."
+        },
+        "url": {
+            "type": "(string/number/password/boolean/array/map/text_area) default is string",
+            "required": true,
+            "description": "URL to be post",
+            "enums": null,
+            "language": null
+        },
+        "username": {
+            "type": "string",
+            "required": false,
+            "description": "username to be posted",
+            "enums": null,
+            "language": null
+        }
+    }
+}

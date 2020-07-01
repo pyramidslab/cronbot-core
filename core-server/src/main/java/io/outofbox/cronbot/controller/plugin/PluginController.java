@@ -4,6 +4,7 @@ import io.outofbox.cronbot.controller.util.ControllerUtils;
 import io.outofbox.cronbot.error.ConflictExcpetion;
 import io.outofbox.cronbot.error.NotFoundException;
 import io.outofbox.cronbot.error.OperationFailureException;
+import io.outofbox.cronbot.model.integration.IntegrationDefinition;
 import io.outofbox.cronbot.model.plugin.Plugin;
 import io.outofbox.cronbot.model.plugin.PluginDetails;
 import io.outofbox.cronbot.model.user.User;
@@ -18,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.FailedLoginException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -31,6 +35,42 @@ public class PluginController {
     @Autowired
     public PluginController(IPluginService pluginService){
         this.pluginService = pluginService;
+    }
+
+    @RequestMapping(value = "/sample/integration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<IntegrationDefinition> getSampleIntegration(){
+        IntegrationDefinition integrationDefinition = new IntegrationDefinition();
+        integrationDefinition.setDescription("Short description");
+        Map<String, IntegrationDefinition.Definition> definitionMap = new HashMap<>();
+
+        IntegrationDefinition.Definition urlDef = new IntegrationDefinition.Definition();
+        urlDef.setType("(string/number/password/boolean/array/map/text_area) default is string");
+        urlDef.setRequired(true);
+        urlDef.setDescription("URL to be post");
+        definitionMap.put("url", urlDef);
+
+        IntegrationDefinition.Definition usernameDef = new IntegrationDefinition.Definition();
+        usernameDef.setType("string");
+        usernameDef.setRequired(false);
+        usernameDef.setDescription("username to be posted");
+        definitionMap.put("username", usernameDef);
+
+        IntegrationDefinition.Definition enumValuesDef = new IntegrationDefinition.Definition();
+        enumValuesDef.setType("string");
+        enumValuesDef.setRequired(false);
+        enumValuesDef.setDescription("Choose value");
+        enumValuesDef.setEnums(Arrays.asList("POST", "GET","DELETE"));
+        definitionMap.put("http_method", enumValuesDef);
+
+        IntegrationDefinition.Definition languageDef = new IntegrationDefinition.Definition();
+        languageDef.setType("text_area");
+        languageDef.setRequired(false);
+        languageDef.setDescription("Enter http body");
+        languageDef.setLanguage("json, sql, xml, etc...");
+        definitionMap.put("body", languageDef);
+        integrationDefinition.setDefinition(definitionMap);
+
+        return  ResponseEntity.ok(integrationDefinition);
     }
 
     @RequestMapping(value = "/{plugin-id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

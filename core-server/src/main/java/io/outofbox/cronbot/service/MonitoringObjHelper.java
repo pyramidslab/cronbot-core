@@ -19,7 +19,13 @@ public class MonitoringObjHelper {
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public MonitoringObj createMonitoringObj(){
         String username = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return MonitoringObj.builder().createdAt(new Date()).createdBy(username).enabled(true).lastModifiedAt(new Date()).lastModifiedBy(username).build();
+        MonitoringObj monitoringObj = new MonitoringObj();
+        monitoringObj.setCreatedAt(new Date());
+        monitoringObj.setCreatedBy(username);
+        monitoringObj.setEnabled(true);
+        monitoringObj.setLastModifiedAt(new Date());
+        monitoringObj.setLastModifiedBy(username);
+        return monitoringObj;
     }
 
     @Bean("updateMonitoringObj")

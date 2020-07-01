@@ -70,7 +70,7 @@ public class PluginService  implements IPluginService {
             Plugin newPlugin = new Plugin();
             Plugin mergedPlugin = objectUtils.patchObject(newPlugin, pluginDetails);
             MonitoringObj monitoringObj = monitoringObjHelper.createMonitoringObj();
-            newPlugin.setMonitoring(monitoringObj);
+            mergedPlugin.setMonitoring(monitoringObj);
             mergedPlugin = pluginRepository.save(mergedPlugin);
             return mergedPlugin;
         }catch (MongoException ex){

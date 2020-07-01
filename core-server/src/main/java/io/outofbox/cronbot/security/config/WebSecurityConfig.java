@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      *
      */
     private final String[] publicEndPoint= {
-            "/api/users/login"
+            "/api/users/login" , "/api/plugins/sample/integration"
     };
 
     /**
