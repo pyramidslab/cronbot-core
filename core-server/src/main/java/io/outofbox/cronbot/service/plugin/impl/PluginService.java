@@ -7,9 +7,8 @@ import io.outofbox.cronbot.error.OperationFailureException;
 import io.outofbox.cronbot.model.MonitoringObj;
 import io.outofbox.cronbot.model.plugin.Plugin;
 import io.outofbox.cronbot.model.plugin.PluginDetails;
-import io.outofbox.cronbot.model.user.User;
 import io.outofbox.cronbot.repository.plugin.PluginRepository;
-import io.outofbox.cronbot.service.MonitoringObjService;
+import io.outofbox.cronbot.service.MonitoringObjHelper;
 import io.outofbox.cronbot.service.plugin.IPluginService;
 import io.outofbox.cronbot.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +25,13 @@ public class PluginService  implements IPluginService {
 
     private PluginRepository pluginRepository;
     private ObjectUtils objectUtils;
-    private MonitoringObjService monitoringObjService;
+    private MonitoringObjHelper monitoringObjHelper;
 
     @Autowired
-    public PluginService(PluginRepository pluginRepository, ObjectUtils objectUtils, MonitoringObjService monitoringObjService){
+    public PluginService(PluginRepository pluginRepository, ObjectUtils objectUtils, MonitoringObjHelper monitoringObjHelper){
         this.pluginRepository = pluginRepository;
         this.objectUtils = objectUtils;
-        this.monitoringObjService = monitoringObjService;
+        this.monitoringObjHelper = monitoringObjHelper;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER)")
@@ -49,7 +48,7 @@ public class PluginService  implements IPluginService {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
     public List<Plugin> findAllWithPage(int page, int size) throws OperationFailureException {
         try {
@@ -60,7 +59,7 @@ public class PluginService  implements IPluginService {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
     public Plugin createPlugin(PluginDetails pluginDetails) throws OperationFailureException, ConflictExcpetion {
         try {
@@ -70,7 +69,7 @@ public class PluginService  implements IPluginService {
             }
             Plugin newPlugin = new Plugin();
             Plugin mergedPlugin = objectUtils.patchObject(newPlugin, pluginDetails);
-            MonitoringObj monitoringObj = monitoringObjService.createMonitoringObj();
+            MonitoringObj monitoringObj = monitoringObjHelper.createMonitoringObj();
             newPlugin.setMonitoring(monitoringObj);
             mergedPlugin = pluginRepository.save(mergedPlugin);
             return mergedPlugin;
@@ -79,7 +78,7 @@ public class PluginService  implements IPluginService {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
     public Plugin updatePlugin(String id, PluginDetails pluginDetails) throws OperationFailureException, NotFoundException {
         try {
@@ -89,7 +88,7 @@ public class PluginService  implements IPluginService {
             }
             Plugin mergedPlugin = objectUtils.patchObject(plugin.get(), pluginDetails);
             MonitoringObj monitoringObj = plugin.get().getMonitoring();
-            monitoringObj = monitoringObjService.updateMonitoringObj(monitoringObj);
+            monitoringObj = monitoringObjHelper.updateMonitoringObj(monitoringObj);
             mergedPlugin.setMonitoring(monitoringObj);
             mergedPlugin = pluginRepository.save(mergedPlugin);
             return mergedPlugin;
@@ -98,7 +97,7 @@ public class PluginService  implements IPluginService {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
     public Plugin deletePlugin(String id) throws OperationFailureException, NotFoundException {
         try {
