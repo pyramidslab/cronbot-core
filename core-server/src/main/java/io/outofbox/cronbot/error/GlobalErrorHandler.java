@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.WebUtils;
 
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * Global error handler controller
  * @author ahelmy
  */
+@EnableWebMvc
 @ControllerAdvice
 public class GlobalErrorHandler  extends ResponseEntityExceptionHandler {
 
@@ -28,8 +30,9 @@ public class GlobalErrorHandler  extends ResponseEntityExceptionHandler {
      * @return
      */
     @ExceptionHandler(ConflictExcpetion.class)
-    public ApiError handleConflict(HttpServletRequest req, Exception ex){
-        return new ApiError(HttpStatus.CONFLICT,ex.getMessage(),ex);
+    public ResponseEntity<ApiError> handleConflict(HttpServletRequest req, Exception ex){
+        ApiError apiError =  new ApiError(HttpStatus.CONFLICT,ex.getMessage(),ex);
+        return new ResponseEntity<ApiError>(apiError, HttpStatus.CONFLICT);
     }
     /**
      * Not found exception handling
@@ -38,8 +41,9 @@ public class GlobalErrorHandler  extends ResponseEntityExceptionHandler {
      * @return
      */
     @ExceptionHandler(NotFoundException.class)
-    public ApiError handleNotFound(HttpServletRequest req, Exception ex){
-        return new ApiError(HttpStatus.NOT_FOUND,ex.getMessage(),ex);
+    public ResponseEntity<ApiError> handleNotFound(HttpServletRequest req, Exception ex){
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,ex.getMessage(),ex);
+        return new ResponseEntity<ApiError>(apiError, HttpStatus.NOT_FOUND);
     }
 
     /**

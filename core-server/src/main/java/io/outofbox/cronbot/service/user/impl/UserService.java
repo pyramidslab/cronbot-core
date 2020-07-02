@@ -44,7 +44,7 @@ public class UserService implements IUserService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or @securityHelper.canAccessOwn(#username)")
     @Override
-    public User findUserByUsername(String username) throws NotFoundException, OperationFailureException {
+    public User findById(String username) throws NotFoundException, OperationFailureException {
         try {
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
@@ -71,14 +71,14 @@ public class UserService implements IUserService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public User createUser(String username, UserDetails userDetails) throws OperationFailureException, ConflictExcpetion {
+    public User create(UserDetails userDetails) throws OperationFailureException, ConflictExcpetion {
         try {
-            Optional<User> oldUser = userRepository.findByUsername(username);
+            Optional<User> oldUser = userRepository.findByUsername(userDetails.getUsername());
             if(oldUser.isPresent()){
                 throw new ConflictExcpetion("User already exists");
             }
             User user = new User();
-            user.setUsername(username);
+            user.setUsername(userDetails.getUsername());
             User mergedUser = objectUtils.patchObject(user, userDetails);
             if(StringUtils.isEmpty(userDetails.getPassword())){
                 userDetails.setPassword(defaultPassword);
@@ -93,7 +93,7 @@ public class UserService implements IUserService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or @securityHelper.canAccessOwn(#username)")
     @Override
-    public User updateUser(String username, UserDetails userDetails) throws OperationFailureException, NotFoundException {
+    public User update(String username, UserDetails userDetails) throws OperationFailureException, NotFoundException {
         if(userDetails.getUsername()!= null && !userDetails.getUsername().equals(username)){
             throw new NotFoundException("Users not match");
         }
@@ -126,7 +126,7 @@ public class UserService implements IUserService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Override
-    public User deleteUser(String username) throws NotFoundException, OperationFailureException {
+    public User delete(String username) throws NotFoundException, OperationFailureException {
         try {
             Optional<User> user = userRepository.findByUsername(username);
             if (!user.isPresent()) {

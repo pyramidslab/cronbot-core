@@ -87,7 +87,7 @@ public class PluginController {
                                                      @PathVariable("plugin-id") String id,
                                                      @RequestBody PluginDetails pluginDetails) throws NotFoundException, OperationFailureException {
 
-        Plugin plugin = pluginService.updatePlugin(id, pluginDetails);
+        Plugin plugin = pluginService.update(id, pluginDetails);
 
         return  ResponseEntity.ok(plugin);
     }
@@ -96,7 +96,7 @@ public class PluginController {
     public ResponseEntity<Plugin> deleteById(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
                                                      @PathVariable("plugin-id") String id) throws FailedLoginException, NotFoundException, OperationFailureException {
 
-        Plugin plugin = pluginService.deletePlugin( id);
+        Plugin plugin = pluginService.delete( id);
 
         return  ResponseEntity.ok(plugin);
     }
@@ -106,7 +106,7 @@ public class PluginController {
     public ResponseEntity<Plugin> addPlugin(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
                                            @RequestBody PluginDetails pluginDetails) throws ConflictExcpetion, OperationFailureException {
 
-        Plugin plugin = pluginService.createPlugin(pluginDetails);
+        Plugin plugin = pluginService.create(pluginDetails);
 
         return  ResponseEntity.ok(plugin);
     }

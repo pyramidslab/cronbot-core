@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.FailedLoginException;
+import javax.validation.Valid;
 import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
@@ -33,7 +34,7 @@ public class UserController {
     public ResponseEntity<User> getUserByUsername(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
                                           @PathVariable("user-id") String username) throws NotFoundException, OperationFailureException {
 
-        User user = userService.findUserByUsername(username);
+        User user = userService.findById(username);
 
         return  ResponseEntity.ok(user);
     }
@@ -43,7 +44,7 @@ public class UserController {
                                            @PathVariable("user-id") String username,
                                            @RequestBody UserDetails userDetails) throws NotFoundException, OperationFailureException {
 
-        User user = userService.updateUser(username, userDetails);
+        User user = userService.update(username, userDetails);
 
         return  ResponseEntity.ok(user);
     }
@@ -52,7 +53,7 @@ public class UserController {
     public ResponseEntity<User> deleteUserByUsername(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
                                                   @PathVariable("user-id") String username) throws FailedLoginException, NotFoundException, OperationFailureException {
 
-        User user = userService.deleteUser( username);
+        User user = userService.delete( username);
 
         return  ResponseEntity.ok(user);
     }
@@ -60,9 +61,9 @@ public class UserController {
 
     @RequestMapping( method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createUser(@RequestHeader(TokenProvider.HEADER_STRING) String authorization,
-                                           @RequestBody UserDetails userDetails) throws ConflictExcpetion, OperationFailureException {
+                                           @Valid @RequestBody  UserDetails userDetails) throws ConflictExcpetion, OperationFailureException {
 
-        User user = userService.createUser(userDetails.getUsername(), userDetails);
+        User user = userService.create(userDetails);
 
         return  ResponseEntity.ok(user);
     }

@@ -3,14 +3,13 @@ package io.outofbox.cronbot.model.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Validated
 @NoArgsConstructor
 public class UserDetails {
 
@@ -18,6 +17,7 @@ public class UserDetails {
         this.username = username;
     }
 
+    @NotEmpty
     private String username;
     private String password;
     @JsonProperty("first_name")

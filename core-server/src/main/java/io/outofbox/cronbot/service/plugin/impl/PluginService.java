@@ -8,7 +8,7 @@ import io.outofbox.cronbot.model.MonitoringObj;
 import io.outofbox.cronbot.model.plugin.Plugin;
 import io.outofbox.cronbot.model.plugin.PluginDetails;
 import io.outofbox.cronbot.repository.plugin.PluginRepository;
-import io.outofbox.cronbot.service.MonitoringObjHelper;
+import io.outofbox.cronbot.service.common.MonitoringObjHelper;
 import io.outofbox.cronbot.service.plugin.IPluginService;
 import io.outofbox.cronbot.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class PluginService  implements IPluginService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
-    public Plugin createPlugin(PluginDetails pluginDetails) throws OperationFailureException, ConflictExcpetion {
+    public Plugin create(PluginDetails pluginDetails) throws OperationFailureException, ConflictExcpetion {
         try {
             Optional<Plugin> plugin = pluginRepository.findByName(pluginDetails.getName());
             if (plugin.isPresent()) {
@@ -80,7 +80,7 @@ public class PluginService  implements IPluginService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
-    public Plugin updatePlugin(String id, PluginDetails pluginDetails) throws OperationFailureException, NotFoundException {
+    public Plugin update(String id, PluginDetails pluginDetails) throws OperationFailureException, NotFoundException {
         try {
             Optional<Plugin> plugin = pluginRepository.findById(id);
             if (!plugin.isPresent()) {
@@ -99,7 +99,7 @@ public class PluginService  implements IPluginService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Override
-    public Plugin deletePlugin(String id) throws OperationFailureException, NotFoundException {
+    public Plugin delete(String id) throws OperationFailureException, NotFoundException {
         try {
             Optional<Plugin> plugin = pluginRepository.findById(id);
             if (!plugin.isPresent()) {
