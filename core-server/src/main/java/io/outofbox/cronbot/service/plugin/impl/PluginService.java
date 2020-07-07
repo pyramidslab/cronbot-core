@@ -11,6 +11,7 @@ import io.outofbox.cronbot.repository.plugin.PluginRepository;
 import io.outofbox.cronbot.service.common.MonitoringObjHelper;
 import io.outofbox.cronbot.service.plugin.IPluginService;
 import io.outofbox.cronbot.utils.ObjectUtils;
+import io.outofbox.cronbot.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,12 +27,14 @@ public class PluginService  implements IPluginService {
     private PluginRepository pluginRepository;
     private ObjectUtils objectUtils;
     private MonitoringObjHelper monitoringObjHelper;
+    private RandomUtils randomUtils;
 
     @Autowired
-    public PluginService(PluginRepository pluginRepository, ObjectUtils objectUtils, MonitoringObjHelper monitoringObjHelper){
+    public PluginService(PluginRepository pluginRepository, ObjectUtils objectUtils, MonitoringObjHelper monitoringObjHelper, RandomUtils randomUtils){
         this.pluginRepository = pluginRepository;
         this.objectUtils = objectUtils;
         this.monitoringObjHelper = monitoringObjHelper;
+        this.randomUtils = randomUtils;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -71,6 +74,10 @@ public class PluginService  implements IPluginService {
             Plugin mergedPlugin = objectUtils.patchObject(newPlugin, pluginDetails);
             MonitoringObj monitoringObj = monitoringObjHelper.createMonitoringObj();
             mergedPlugin.setMonitoring(monitoringObj);
+            // Generate token
+            String token = randomUtils.random();
+            mergedPlugin.setToken(token);
+
             mergedPlugin = pluginRepository.save(mergedPlugin);
             return mergedPlugin;
         }catch (MongoException ex){
