@@ -3,6 +3,8 @@
 # Cronbot
 Cronbot is a distributed cron job system allowing specific tasks/jobs to be executed at scheduled time or recurring times.
 
+## Postman
+[Cronbot-Postman](https://www.getpostman.com/collections/e1309359b17473ac5989)
 
 ## Table of contents
 - [Architecture](#architecture)

@@ -15,10 +15,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
-import static io.outofbox.cronbot.security.config.TokenProvider.*;
+import static io.outofbox.cronbot.security.config.TokenProvider.HEADER_STRING;
+import static io.outofbox.cronbot.security.config.TokenProvider.TOKEN_PREFIX;
 
 /**
  *

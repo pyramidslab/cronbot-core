@@ -1,21 +1,23 @@
 package io.outofbox.cronbot.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.outofbox.cronbot.model.Role;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class UserDetails {
+
+    public UserDetails(String username){
+        this.username = username;
+    }
+
+    @NotEmpty
     private String username;
     private String password;
     @JsonProperty("first_name")

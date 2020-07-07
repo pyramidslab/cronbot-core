@@ -3,7 +3,6 @@ package io.outofbox.cronbot.security.service.impl;
 import io.outofbox.cronbot.model.user.User;
 import io.outofbox.cronbot.security.config.TokenProvider;
 import io.outofbox.cronbot.security.model.LoginUser;
-import io.outofbox.cronbot.model.Role;
 import io.outofbox.cronbot.security.model.Token;
 import io.outofbox.cronbot.security.service.IAuthenticationService;
 import org.assertj.core.api.Assertions;

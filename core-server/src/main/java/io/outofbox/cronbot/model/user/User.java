@@ -12,8 +12,6 @@ import java.util.Set;
 
 @Data
 @Document("users")
-@Entity(name = "users")
-@Table( name="users")
 public class User extends BaseUser {
     private String username;
     @JsonIgnore

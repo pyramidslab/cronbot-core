@@ -7,7 +7,6 @@ import io.outofbox.cronbot.error.OperationFailureException;
 import io.outofbox.cronbot.model.user.User;
 import io.outofbox.cronbot.model.user.UserDetails;
 import io.outofbox.cronbot.repository.user.UserRepository;
-import io.outofbox.cronbot.security.config.TokenProvider;
 import io.outofbox.cronbot.security.util.SecurityHelper;
 import io.outofbox.cronbot.service.user.IUserService;
 import io.outofbox.cronbot.utils.ObjectUtils;
@@ -43,9 +42,9 @@ public class UserService implements IUserService {
         this.securityHelper = securityHelper;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or @securityHelper.canAccessOwn(#authorization, #username)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or @securityHelper.canAccessOwn(#username)")
     @Override
-    public User findUserByUsername(String authorization, String username) throws NotFoundException, OperationFailureException {
+    public User findById(String username) throws NotFoundException, OperationFailureException {
         try {
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
@@ -72,14 +71,14 @@ public class UserService implements IUserService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public User createUser(String username, UserDetails userDetails) throws OperationFailureException, ConflictExcpetion {
+    public User create(UserDetails userDetails) throws OperationFailureException, ConflictExcpetion {
         try {
-            Optional<User> oldUser = userRepository.findByUsername(username);
+            Optional<User> oldUser = userRepository.findByUsername(userDetails.getUsername());
             if(oldUser.isPresent()){
                 throw new ConflictExcpetion("User already exists");
             }
             User user = new User();
-            user.setUsername(username);
+            user.setUsername(userDetails.getUsername());
             User mergedUser = objectUtils.patchObject(user, userDetails);
             if(StringUtils.isEmpty(userDetails.getPassword())){
                 userDetails.setPassword(defaultPassword);
@@ -92,9 +91,12 @@ public class UserService implements IUserService {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityHelper.canAccessOwn(#authorization, #username)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityHelper.canAccessOwn(#username)")
     @Override
-    public User updateUser(String authorization, String username, UserDetails userDetails) throws OperationFailureException, NotFoundException {
+    public User update(String username, UserDetails userDetails) throws OperationFailureException, NotFoundException {
+        if(userDetails.getUsername()!= null && !userDetails.getUsername().equals(username)){
+            throw new NotFoundException("Users not match");
+        }
         try {
             Optional<User> oldUser = userRepository.findByUsername(username);
             if(!oldUser.isPresent()){
@@ -111,7 +113,8 @@ public class UserService implements IUserService {
             }else{
                 mergedUser.setPassword(encoder.encode(userDetails.getPassword()));
             }
-            if(!securityHelper.canAccessOwn(authorization,username)){
+            // Check if the roles is null or not changed by admin revert it back
+            if(mergedUser.getRoles()== null || mergedUser.getRoles().isEmpty() || securityHelper.canAccessOwn(username)){
                 mergedUser.setRoles(oldUser.get().getRoles());
             }
             mergedUser = userRepository.save(mergedUser);
@@ -123,7 +126,7 @@ public class UserService implements IUserService {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Override
-    public User deleteUser(String authorization, String username) throws NotFoundException, OperationFailureException {
+    public User delete(String username) throws NotFoundException, OperationFailureException {
         try {
             Optional<User> user = userRepository.findByUsername(username);
             if (!user.isPresent()) {
