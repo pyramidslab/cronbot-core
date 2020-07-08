@@ -15,5 +15,4 @@ public class PluginDetails {
     private String description;
     @JsonProperty("integration_def")
     private IntegrationDefinition integrationDefinition;
-
 }
