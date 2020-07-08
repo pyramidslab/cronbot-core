@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author ahelmy
  */
 @SpringBootApplication
-public class CronbotApplication {
+public class CronbotApplication{
 
     public static void main(String[] args) {
         SpringApplication.run(CronbotApplication.class, args);
@@ -27,4 +27,5 @@ public class CronbotApplication {
     public ObjectMapper objectMapper(){
         return new ObjectMapper();
     }
+
 }
