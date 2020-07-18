@@ -240,8 +240,8 @@ public class RabbitMQConfig implements IMQAdminConfiguration {
         boolean isVHostCreated = createVHost(vHost);
         if (isVHostCreated) {
             // Add User for executor
-            String randPass = randomUtils.random(20);
-            String randUsername = randomUtils.random(10);
+            String randPass = randomUtils.random(RAND_PASS_LENGTH);
+            String randUsername = randomUtils.random(RAND_USERNAME_LENGTH);
             // Add User
             boolean isUserCreated = createUser(randUsername, randPass);
             if (isUserCreated) {

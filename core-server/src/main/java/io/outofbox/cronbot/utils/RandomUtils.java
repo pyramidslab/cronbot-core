@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomUtils {
 
-    private static final int LENGTH = 50;
+    private static final int LENGTH = 100;
 
     public String random(int length){
         return RandomStringUtils.randomAlphanumeric(length);
