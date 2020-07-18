@@ -4,11 +4,15 @@ import com.mongodb.MongoException;
 import io.outofbox.cronbot.error.ConflictExcpetion;
 import io.outofbox.cronbot.error.NotFoundException;
 import io.outofbox.cronbot.error.OperationFailureException;
+import io.outofbox.cronbot.model.MQConfiguration;
 import io.outofbox.cronbot.model.MonitoringObj;
 import io.outofbox.cronbot.model.plugin.Plugin;
+import io.outofbox.cronbot.model.plugin.PluginConfiguration;
 import io.outofbox.cronbot.model.plugin.PluginDetails;
+import io.outofbox.cronbot.repository.plugin.PluginConfigurationRepository;
 import io.outofbox.cronbot.repository.plugin.PluginRepository;
 import io.outofbox.cronbot.service.common.MonitoringObjHelper;
+import io.outofbox.cronbot.service.mq.IMQAdminConfiguration;
 import io.outofbox.cronbot.service.plugin.IPluginService;
 import io.outofbox.cronbot.utils.ObjectUtils;
 import io.outofbox.cronbot.utils.RandomUtils;
@@ -22,19 +26,29 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PluginService  implements IPluginService {
+public class PluginService implements IPluginService {
 
     private PluginRepository pluginRepository;
     private ObjectUtils objectUtils;
     private MonitoringObjHelper monitoringObjHelper;
     private RandomUtils randomUtils;
+    private IMQAdminConfiguration mqAdminConfig;
+    private PluginConfigurationRepository pluginConfigurationRepository;
 
     @Autowired
-    public PluginService(PluginRepository pluginRepository, ObjectUtils objectUtils, MonitoringObjHelper monitoringObjHelper, RandomUtils randomUtils){
+    public PluginService(PluginRepository pluginRepository,
+                         ObjectUtils objectUtils,
+                         MonitoringObjHelper monitoringObjHelper,
+                         RandomUtils randomUtils,
+                         IMQAdminConfiguration mqAdminConfig,
+                         PluginConfigurationRepository pluginConfigurationRepository) {
         this.pluginRepository = pluginRepository;
         this.objectUtils = objectUtils;
         this.monitoringObjHelper = monitoringObjHelper;
         this.randomUtils = randomUtils;
+        this.mqAdminConfig = mqAdminConfig;
+        this.pluginConfigurationRepository = pluginConfigurationRepository;
+
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -46,7 +60,7 @@ public class PluginService  implements IPluginService {
                 throw new NotFoundException("Plugin not exists");
             }
             return plugin.get();
-        }catch (MongoException ex){
+        } catch (MongoException ex) {
             throw new OperationFailureException("Failed to retrieve plugin", ex);
         }
     }
@@ -55,7 +69,7 @@ public class PluginService  implements IPluginService {
     @Override
     public List<Plugin> findAllWithPage(int page, int size) throws OperationFailureException {
         try {
-            Page<Plugin> plugins = pluginRepository.findAll(PageRequest.of(page,size ));
+            Page<Plugin> plugins = pluginRepository.findAll(PageRequest.of(page, size));
             return plugins.getContent();
         } catch (MongoException ex) {
             throw new OperationFailureException("Failed to find plugins", ex);
@@ -77,10 +91,19 @@ public class PluginService  implements IPluginService {
             // Generate token
             String token = randomUtils.random();
             mergedPlugin.setToken(token);
-
+            // Add plugin configuration
+            Optional<MQConfiguration> mqConfiguration = mqAdminConfig.createMQConfig(mergedPlugin.getName());
+            if (mqConfiguration.isPresent()) {
+                PluginConfiguration pluginConfiguration = new PluginConfiguration();
+                pluginConfiguration.setPluginID(mergedPlugin.getId());
+                pluginConfiguration.setToken(mergedPlugin.getToken());
+                pluginConfiguration.setConfiguration(mqConfiguration.get());
+                pluginConfigurationRepository.save(pluginConfiguration);
+            }
+            // Save Plugin
             mergedPlugin = pluginRepository.save(mergedPlugin);
             return mergedPlugin;
-        }catch (MongoException ex){
+        } catch (MongoException ex) {
             throw new OperationFailureException("Failed to save plugin", ex);
         }
     }
@@ -99,7 +122,7 @@ public class PluginService  implements IPluginService {
             mergedPlugin.setMonitoring(monitoringObj);
             mergedPlugin = pluginRepository.save(mergedPlugin);
             return mergedPlugin;
-        }catch (MongoException ex){
+        } catch (MongoException ex) {
             throw new OperationFailureException("Failed to update plugin", ex);
         }
     }
@@ -114,7 +137,20 @@ public class PluginService  implements IPluginService {
             }
             pluginRepository.deleteById(id);
             return plugin.get();
-        }catch (MongoException ex){
+        } catch (MongoException ex) {
+            throw new OperationFailureException("Failed to delete plugin", ex);
+        }
+    }
+
+    @Override
+    public PluginConfiguration getPluginConfig(String token) throws OperationFailureException, NotFoundException {
+        try {
+            Optional<PluginConfiguration> pluginConfiguration = pluginConfigurationRepository.findByToken(token);
+            if (!pluginConfiguration.isPresent()) {
+                throw new NotFoundException("Plugin config not exists");
+            }
+            return pluginConfiguration.get();
+        } catch (MongoException ex) {
             throw new OperationFailureException("Failed to delete plugin", ex);
         }
     }

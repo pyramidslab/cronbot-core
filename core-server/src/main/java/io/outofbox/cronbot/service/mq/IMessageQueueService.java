@@ -1,8 +1,9 @@
 package io.outofbox.cronbot.service.mq;
 
 import io.outofbox.cronbot.error.MQException;
+import io.outofbox.cronbot.service.plugin.IPluginConfigurationService;
 
-public interface IMessageQueueService {
+public interface IMessageQueueService{
     /**
      * Send an object after convert it to json
      * @param obj Object to be sent

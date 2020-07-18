@@ -6,7 +6,9 @@ import io.outofbox.cronbot.error.NotFoundException;
 import io.outofbox.cronbot.error.OperationFailureException;
 import io.outofbox.cronbot.model.integration.IntegrationDefinition;
 import io.outofbox.cronbot.model.plugin.Plugin;
+import io.outofbox.cronbot.model.plugin.PluginConfiguration;
 import io.outofbox.cronbot.model.plugin.PluginDetails;
+import io.outofbox.cronbot.model.plugin.PluginExecutor;
 import io.outofbox.cronbot.model.user.User;
 import io.outofbox.cronbot.model.user.UserDetails;
 import io.outofbox.cronbot.security.config.TokenProvider;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.FailedLoginException;
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -123,4 +126,9 @@ public class PluginController {
         return  ResponseEntity.ok(plugins);
     }
 
+    @RequestMapping(value = "/configuration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PluginConfiguration> getPluginExecutorConfig(@RequestBody @Valid PluginExecutor pluginExecutor) throws NotFoundException, OperationFailureException{
+        PluginConfiguration pluginConfiguration = pluginService.getPluginConfig(pluginExecutor.getToken());
+        return  ResponseEntity.ok(pluginConfiguration);
+    }
 }

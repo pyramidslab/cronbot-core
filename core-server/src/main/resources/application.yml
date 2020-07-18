@@ -12,6 +12,7 @@ mq:
   queuename: jobs-events
   host: localhost
   port: 5672
+  api-port: 15672
   username: guest
   password: guest
 mongo:

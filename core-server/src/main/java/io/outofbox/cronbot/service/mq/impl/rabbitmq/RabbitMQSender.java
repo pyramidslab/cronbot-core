@@ -1,11 +1,13 @@
 package io.outofbox.cronbot.service.mq.impl.rabbitmq;
 
 import io.outofbox.cronbot.error.MQException;
+import io.outofbox.cronbot.model.plugin.PluginConfiguration;
 import io.outofbox.cronbot.service.mq.IMessageQueueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -33,4 +35,5 @@ public class RabbitMQSender  implements IMessageQueueService {
         }
 
     }
+
 }

@@ -1,24 +1,20 @@
 package io.outofbox.cronbot.config;
 
 
-import io.outofbox.cronbot.model.MonitoringObj;
 import io.outofbox.cronbot.model.user.User;
 import io.outofbox.cronbot.repository.user.UserRepository;
-import io.outofbox.cronbot.service.mq.MessageQueueFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-
-@Configuration
 @Slf4j
+@Configuration
 public class AppConfiguration implements CommandLineRunner {
 
     private String adminUsername;
